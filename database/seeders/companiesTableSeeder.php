@@ -16,6 +16,29 @@ class companiesTableSeeder extends Seeder
      */
     public function run()
     {
-        Companie::factory()->count(10)->create();
+       \DB::table('companies')->insert([
+        [
+            'company_name' => 'Coca-Cola',
+            'street_address' => null,
+            'representative_name' => null,
+        ],
+        [
+            'company_name' => 'サントリー',
+            'street_address' => null,
+            'representative_name' => null,
+        ],
+        [
+            'company_name' => 'キリン',
+            'street_address' => null,
+            'representative_name' => null,
+        ],
+        [
+            'company_name' => '伊藤園',
+            'street_address' => null,
+            'representative_name' => null,
+        ],
+
+
+       ]);
     }
 }

@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/products', [App\Http\Controllers\ProjectController::class, 'index'])->name('products.index');
+
+Route::get('/products/create',[App\Http\Controllers\ProjectController::class, 'create'])->name('products.create');
+Route::post('/products/store',[App\Http\Controllers\ProjectController::class, 'store'])->name('products.store');
