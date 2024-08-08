@@ -20,8 +20,8 @@
 <select>
 
 <option value = "">メーカー名</option>
-@foreach ($companies as $companie)
-            <option>{{ $companies->company_name }}</option>
+@foreach ($companies as $company)
+            <option>{{ $company->company_name }}</option>
 @endforeach
 
 </select>
@@ -45,8 +45,9 @@
             <td><img src="{{ asset('images/'.$product->image)}}" alt="商品画像"></td>
             <td>{{$product->product_name}}</td>
             <td>{{$product->name}}</td>
-            <td>¥{{number_format($product->price)}}</td>
+            <td>¥{{ number_format($product->price) }}</td>
             <td>{{ $product->stock }}</td>
+            <td>{{ $company->company_name }}</td>
         </tr>
         @endforeach
     </tbody>

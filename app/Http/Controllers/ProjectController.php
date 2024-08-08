@@ -11,8 +11,8 @@ class ProjectController extends Controller
     // 一覧表示
     public function index()
     {
-        $products = product::paginate(5); // 商品情報を5件ずつ表示
-        $companies = companie::all();
+        $products = Product::paginate(5); // 商品情報を5件ずつ表示
+        $companies = Companie::all();
         return view('index',['companies' => $companies, 'products' => $products]);
     }
 
