@@ -11,9 +11,20 @@ class ProjectController extends Controller
     // 一覧表示
     public function index()
     {
-        $products = Product::paginate(5); // 商品情報を5件ずつ表示
-        $companies = Companie::all();
-        return view('index',['companies' => $companies, 'products' => $products]);
+$this->posts = new Product();
+$Id = 24; // 適切な ID に置き換え
+$companyName = $this->CompanyNameById($Id);
+$results = Product::where('company_id', $Id)->get();
+
+
+return view('index', compact('results',));
+
+    }
+
+    public function CompanyNameById($id)
+    {
+        $company = Companie::find($id);
+        return $company ? $company->name : '会社が見つかりません';
     }
 
     // 商品作成フォーム表示
