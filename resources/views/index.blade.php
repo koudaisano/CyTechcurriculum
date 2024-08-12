@@ -1,23 +1,12 @@
-<!DOCTYPE html>
-<html lang="ja">
+@extends('layouts.app')
+@section('title', '商品一覧画面')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品一覧画面</title>
+@push('styles')
+<link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+@endpush
 
-    @extends('layouts.app')
-    @push('styles')
-        <link rel= "stylesheet" href= "{{ asset('/css/styles.css') }}">
-    @endpush
-
-    @push('scripts')
-        <script src="{{ asset('js/products.js') }}"></script>
-    @endpush
-</head>
-
-<body>
-    <h1>商品一覧画面</h1>
+@section('content')
+    <h1 class = index_title>商品一覧画面</h1>
     <input type = "text" proceholder = "検索キーワード">
     <select>
 
@@ -27,6 +16,10 @@
         @endforeach
 
     </select>
+
+    <button class="button">検索</button>
+    <button class="button">新規登録</button>
+
     <table>
         <thead>
             <tr>
@@ -38,15 +31,12 @@
                 <th>メーカー名</th>
             </tr>
         </thead>
-    </table>
-    <table>
         <tbody>
             @foreach ($results as $result)
                 <tr>
                     <td>{{ $result->id }}</td>
                     <td><img src="{{ asset('images/' . $result->image) }}" alt="商品画像"></td>
                     <td>{{ $result->product_name }}</td>
-                    <td>{{ $result->name }}</td>
                     <td>¥{{ number_format($result->price) }}</td>
                     <td>{{ $result->stock }}</td>
                     <td>{{ $result->company_name }}</td>
@@ -54,6 +44,4 @@
             @endforeach
         </tbody>
     </table>
-</body>
-
-</html>
+@endsection

@@ -17,6 +17,7 @@ $companyName = $this->CompanyNameById($Id);
 $results = Product::where('company_id', $Id)->get();
 
 
+
 return view('index', compact('results',));
 
     }
