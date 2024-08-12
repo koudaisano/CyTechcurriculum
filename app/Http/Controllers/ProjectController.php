@@ -24,7 +24,7 @@ return view('index', compact('results',));
     public function CompanyNameById($id)
     {
         $company = Companie::find($id);
-        return $company ? $company->name : '会社が見つかりません';
+
     }
 
     // 商品作成フォーム表示

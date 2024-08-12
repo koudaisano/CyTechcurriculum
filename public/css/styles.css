@@ -1,4 +1,9 @@
 /* 商品一覧のスタイル */
+.h1{
+    font-weight: 800;
+}
+
+
 .container {
     margin: 20px;
 }

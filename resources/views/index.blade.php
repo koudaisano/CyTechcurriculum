@@ -7,13 +7,13 @@
     <title>商品一覧画面</title>
 
     @extends('layouts.app')
-    @section('styles')
-        <link rel= "stylesheet" href= "{{ asset('/css/style.css') }}">
-    @endsection
+    @push('styles')
+        <link rel= "stylesheet" href= "{{ asset('/css/styles.css') }}">
+    @endpush
 
-    @section('scripts')
+    @push('scripts')
         <script src="{{ asset('js/products.js') }}"></script>
-    @endsection
+    @endpush
 </head>
 
 <body>
