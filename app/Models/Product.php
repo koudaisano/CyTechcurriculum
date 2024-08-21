@@ -17,4 +17,9 @@ class Product extends Model
         ->select('companies.company_name')
         ->first();
     }
+
+    public function company()
+    {
+        return $this->belongsTo(Companie::class, 'company_id');
+    }
 }

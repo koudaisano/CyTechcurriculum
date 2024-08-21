@@ -4,21 +4,20 @@
 @push('styles')
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 @endpush
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
 @section('content')
-    <h1 class = index_title>商品一覧画面</h1>
-    <input type = "text" proceholder = "検索キーワード">
-    <select>
-
-        <option value = "">メーカー名</option>
-        @foreach ($results as $result)
-            <option>{{ $result->Company_name }}</option>
-        @endforeach
-
-    </select>
-
-    <button class="button">検索</button>
-    <button class="button">新規登録</button>
+    <h1>商品一覧画面</h1>
+        <div class = "search-erea">
+            <input type = "text" placeholder = "検索キーワード">
+                    <select>
+                        <option value = "">メーカー名</option>
+                            @foreach ($companies as $company)
+                        <option>{{ $company->company_name }}</option>
+                            @endforeach
+                    </select>
+                <button class="search-button">検索</button>
+        </div>
 
     <table>
         <thead>
@@ -29,19 +28,31 @@
                 <th>価格</th>
                 <th>在庫数</th>
                 <th>メーカー名</th>
+                <th><button onclick="window.location.href='{{ route('products.create') }}'" class="btn-newregistration" onclick="">新規登録</button></th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($results as $result)
+            @foreach ($products as $product)
                 <tr>
-                    <td>{{ $result->id }}</td>
-                    <td><img src="{{ asset('images/' . $result->image) }}" alt="商品画像"></td>
-                    <td>{{ $result->product_name }}</td>
-                    <td>¥{{ number_format($result->price) }}</td>
-                    <td>{{ $result->stock }}</td>
-                    <td>{{ $result->company_name }}</td>
+                    <td>{{ $product->id }}</td>
+                    <td><img src="{{ asset('images/' . $product->image) }}" alt="商品画像"></td>
+                    <td>{{ $product->product_name }}</td>
+                    <td>¥{{ number_format($product->price) }}</td>
+                    <td>{{ $product->stock }}</td>
+                    <td>{{ $product->company_name }}</td>
+                    <td>
+                        <button onclick="window.location.href='{{ route('products.show', $product->id) }}'" class="btn-info">詳細</button>
+                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete">削除</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+    <div class="pagination-container">
+        {{ $products->links() }}
+    </div>
 @endsection

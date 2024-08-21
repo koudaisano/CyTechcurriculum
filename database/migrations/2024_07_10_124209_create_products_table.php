@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('product_name')->nullable(false);
             $table->integer('price')->nullable(false);
             $table->integer('stock')->nullable(false);
-            $table->text('comment')->nulllable(true);
+            $table->text('comment')->nullable(true);
             $table->text('img_path')->nullable(true);
             $table->timestamps();
         });

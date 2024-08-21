@@ -5,54 +5,68 @@ namespace App\Http\Controllers;
 use App\Models\Companie;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class ProjectController extends Controller
 {
     // 一覧表示
     public function index()
     {
-$this->posts = new Product();
-$Id = 24; // 適切な ID に置き換え
-$companyName = $this->CompanyNameById($Id);
-$results = Product::where('company_id', $Id)->get();
+        $products = Product::join('companies', 'products.company_id', '=', 'companies.id')
+        ->select('products.*', 'companies.company_name')
+        ->paginate(6);
 
-
-
-return view('index', compact('results',));
-
+        $companies = Companie::all();
+        $id = 24;
+        $results = $this->CompanyNameById($id);
+        return view('index', compact('results','products','companies'));
     }
 
     public function CompanyNameById($id)
     {
-        $company = Companie::find($id);
-
+        return Product::join('companies', 'products.company_id', '=', 'companies.id')
+        ->where('products.id', $id)
+        ->select('companies.company_name')
+        ->get();
     }
 
     // 商品作成フォーム表示
     public function create()
     {
-        return view('products.create');
+        $companies = Companie::all();
+        return view('create', compact('companies'));
     }
-
-    // 商品の保存
     public function store(Request $request)
     {
-        // バリデーション
-        $request->validate([
-            'name' => 'required|max:255',
+        $validatedData = $request->validate([
+            'product_name' => 'required|max:255',
             'price' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'company_id' => 'required|exists:companies,id',
         ]);
 
-        // 商品の作成
-        Product::create($request->all());
-        return redirect()->route('products.index')->with('success', '商品が作成されました。');
+        // 新規商品の作成
+        $product = new Product();
+        $product->product_name = $request->input('product_name');
+        $product->price = $request->input('price');
+        $product->stock = $request->input('stock');
+        $product->company_id = $request->input('company_id');
+        $product->comment = $request->input('comment');
+
+        if($request->hasFile('product_image')){
+            $product->product_image = $request->file('product_image')->store('images', 'pubulic');
+        }
+
+        //商品を保存
+        $product->save();
+        return redirect()->route('products.create')->with('success','商品作成されました' );
     }
 
+
     // 商品詳細表示
-    public function show($id)
+     public function show(Product $product)
     {
-        $product = Product::findOrFail($id);
-        return view('products.show', compact('product'));
+        return view('show', compact('product'));
     }
 
     // 商品編集フォーム表示
@@ -76,10 +90,12 @@ return view('index', compact('results',));
     }
 
     // 商品の削除
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        $product = Product::findOrFail($id);
+        // 商品の削除処理
         $product->delete();
+
+        // 削除後にリダイレクト
         return redirect()->route('products.index')->with('success', '商品が削除されました。');
     }
 }
