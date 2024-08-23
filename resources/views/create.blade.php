@@ -4,10 +4,11 @@
 <h1>商品新規登録画面</h1>
 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <div>
-        <label for="product_name">商品名 *</label>
-        <input type="text" id="product_name" name="product_name" required>
+    <div class="form-group">
+        <label for="name">商品名</label>
+        <input type="text" name="name" id="name" class="form-control">
     </div>
+
     <div>
         <label for="company_id">メーカー名 *</label>
         <select name="company_id" class="form-control" id="company_id" required>
@@ -16,6 +17,7 @@
             @endforeach
         </select>
     </div>
+
     <div>
         <label for="price">価格 *</label>
         <input type="number" id="price" name="price" required>

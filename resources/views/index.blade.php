@@ -35,14 +35,14 @@
             @foreach ($products as $product)
                 <tr>
                     <td>{{ $product->id }}</td>
-                    <td><img src="{{ asset('images/' . $product->image) }}" alt="商品画像"></td>
+                    <td><img src="{{ asset('images/' . $product->img_path) }}" alt="商品画像"></td>
                     <td>{{ $product->product_name }}</td>
                     <td>¥{{ number_format($product->price) }}</td>
                     <td>{{ $product->stock }}</td>
                     <td>{{ $product->company_name }}</td>
                     <td>
                         <button onclick="window.location.href='{{ route('products.show', $product->id) }}'" class="btn-info">詳細</button>
-                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');" style="display:inline;">
+                        <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-delete">削除</button>

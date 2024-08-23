@@ -34,7 +34,8 @@ class ProjectController extends Controller
     public function create()
     {
         $companies = Companie::all();
-        return view('create', compact('companies'));
+        $product = new Product();
+        return view('create', compact('companies', 'product'));
     }
     public function store(Request $request)
     {
@@ -54,12 +55,12 @@ class ProjectController extends Controller
         $product->comment = $request->input('comment');
 
         if($request->hasFile('product_image')){
-            $product->product_image = $request->file('product_image')->store('images', 'pubulic');
+            $product->img_path = $request->file('product_image')->store('images', 'public');
         }
 
         //商品を保存
         $product->save();
-        return redirect()->route('products.create')->with('success','商品作成されました' );
+        return redirect()->route('products.index')->with('success','商品作成されました' );
     }
 
 
@@ -70,10 +71,9 @@ class ProjectController extends Controller
     }
 
     // 商品編集フォーム表示
-    public function edit($id)
+    public function edit(Product $product)
     {
-        $product = Product::findOrFail($id);
-        return view('products.edit', compact('product'));
+        return view('edit', compact('product'));
     }
 
     // 商品の更新
