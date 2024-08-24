@@ -9,7 +9,7 @@
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
 @section('content')
-<h1>商品情報詳細画面</h1>
+<h2>商品情報詳細画面</h2>
 <div class="container">
     <label>ID {{ $product->id }}</label>
     <label>商品画像<img src="{{ asset('images/' . $product->image) }}" alt="商品画像"></label>

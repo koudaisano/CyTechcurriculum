@@ -34,35 +34,37 @@ class ProjectController extends Controller
     public function create()
     {
         $companies = Companie::all();
-        $product = new Product();
-        return view('create', compact('companies', 'product'));
+        return view('create', compact('companies'));
     }
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'product_name' => 'required|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
             'company_id' => 'required|exists:companies,id',
+            'comment' => 'nullable',
+            'img_path' => 'nullable|image',
         ]);
 
         // 新規商品の作成
-        $product = new Product();
-        $product->product_name = $request->input('product_name');
-        $product->price = $request->input('price');
-        $product->stock = $request->input('stock');
-        $product->company_id = $request->input('company_id');
-        $product->comment = $request->input('comment');
+        $product = new Product([
+        'product_name' => $request->get('product_name'),
+        'company_id' => $request->get('company_id'),
+        'price' => $request->get('price'),
+        'stock' => $request->get('stock'),
+        'comment' => $request->get('comment'),
+    ]);
 
-        if($request->hasFile('product_image')){
-            $product->img_path = $request->file('product_image')->store('images', 'public');
+        if($request->hasFile('img_path')){
+         $filename = $request->img_path->getClientOriginalName();
+         $filePath = $request->img_path->storeAs('products', $filename, 'public');
+         $product->img_path = '/storage/' . $filePath;
         }
 
         //商品を保存
         $product->save();
-        return redirect()->route('products.index')->with('success','商品作成されました' );
     }
-
 
     // 商品詳細表示
      public function show(Product $product)
@@ -99,3 +101,4 @@ class ProjectController extends Controller
         return redirect()->route('products.index')->with('success', '商品が削除されました。');
     }
 }
+

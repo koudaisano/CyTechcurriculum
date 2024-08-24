@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>商品新規登録画面</h1>
+<h2>商品新規登録画面</h2>
 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
-        <label for="name">商品名</label>
-        <input type="text" name="name" id="name" class="form-control">
+        <label for="name">商品名 *</label>
+        <input type="text" name="name" value="{{ old('name') }}" required>
     </div>
 
     <div>
@@ -32,10 +32,15 @@
     </div>
     <div>
         <label for="product_image">商品画像</label>
-        <input type="file" id="product_image" name="product_image">
+        <input type="file" id="product_image" name="img_path">
     </div>
     <div>
         <button type="submit">新規登録</button>
+        @if ($errors->has('product_name'))
+    <div class="alert alert-danger">
+        {{ $errors->first('product_name') }}
+    </div>
+        @endif
         <button type="button" onclick="window.location.href = '/products';">戻る</button>
     </div>
 </form>

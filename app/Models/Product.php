@@ -22,4 +22,14 @@ class Product extends Model
     {
         return $this->belongsTo(Companie::class, 'company_id');
     }
+
+    protected $fillable = [
+        'name',
+        'price',
+        'company_id',
+        'stock',
+        'comment',
+        'img_path',
+        // 他に保存したい属性があればここに追加します
+    ];
 }
