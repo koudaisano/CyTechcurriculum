@@ -6,6 +6,7 @@ use App\Models\Companie;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
@@ -47,23 +48,19 @@ class ProjectController extends Controller
             'img_path' => 'nullable|image',
         ]);
 
-        // 新規商品の作成
-        $product = new Product([
-        'product_name' => $request->get('product_name'),
-        'company_id' => $request->get('company_id'),
-        'price' => $request->get('price'),
-        'stock' => $request->get('stock'),
-        'comment' => $request->get('comment'),
-    ]);
+        // 新規商品の登録処理
+        $product = new Product($request->input());
+        $image = $request->file('img_path');
+        $product->save();
 
         if($request->hasFile('img_path')){
-         $filename = $request->img_path->getClientOriginalName();
-         $filePath = $request->img_path->storeAs('products', $filename, 'public');
-         $product->img_path = '/storage/' . $filePath;
+         $image = $request->file('img_path');
+         $path = \Storage::put('/public', $image);
+         $path = explode('/', $path);
+        }else{
+            $path = null;
         }
-
-        //商品を保存
-        $product->save();
+        return redirect()->route('products.index')->with('success', '商品が登録されました。');
     }
 
     // 商品詳細表示
@@ -75,19 +72,26 @@ class ProjectController extends Controller
     // 商品編集フォーム表示
     public function edit(Product $product)
     {
-        return view('edit', compact('product'));
+        $companies = Companie::all();
+        return view('edit', compact('product', 'companies'));
     }
 
     // 商品の更新
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|max:255',
+            'product_name' => 'required|max:255',
             'price' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'company_id' => 'required|exists:companies,id',
+            'comment' => 'nullable',
+            'img_path' => 'nullable|image',
         ]);
 
         $product = Product::findOrFail($id);
-        $product->update($request->all());
+        Log::info('Product found', ['product' =>$product]);
+        $product->fill($request->input())->saveOrfail();
+        Log::info('Product updated successfully', ['product' =>$product]);
         return redirect()->route('products.index')->with('success', '商品が更新されました。');
     }
 

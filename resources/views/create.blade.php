@@ -6,7 +6,7 @@
     @csrf
     <div class="form-group">
         <label for="name">商品名 *</label>
-        <input type="text" name="name" value="{{ old('name') }}" required>
+        <input type="text" name="product_name" value="{{ old('name') }}" required>
     </div>
 
     <div>

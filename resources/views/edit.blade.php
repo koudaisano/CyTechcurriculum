@@ -15,8 +15,8 @@
         @method('PUT')
 
         <div class="form-group">
-            <label for="name">商品名</label>
-            <input type="text" name="name" id="name" >
+            <label for="product_name">商品名</label>
+            <input type="text" name="product_name" id="product_name" value="{{ old('product_name', $product->product_name) }}" class="form-control">
 
         </div>
 
@@ -46,10 +46,11 @@
 
         <div class="form-group">
             <label for="company_name">メーカー</label>
-            <input type="text" name="company_name" id="company_name" value="{{ old('company_name', $product->company->company_name) }}" class="form-control">
-            @error('company_name')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <select name="company_id" class="form-control" id="company_id" required>
+                @foreach($companies as $company)
+                    <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                @endforeach
+            </select>
         </div>
 
         <button type="submit" class="btn btn-primary">更新</button>

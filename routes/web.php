@@ -14,6 +14,8 @@ use App\Http\Controllers\ProjectController;
 |
 */
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('welcome');
 });

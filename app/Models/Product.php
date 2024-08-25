@@ -24,12 +24,11 @@ class Product extends Model
     }
 
     protected $fillable = [
-        'name',
+        'product_name',
         'price',
         'company_id',
         'stock',
         'comment',
         'img_path',
-        // 他に保存したい属性があればここに追加します
     ];
 }
