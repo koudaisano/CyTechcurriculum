@@ -12,7 +12,7 @@
 <h2>商品情報詳細画面</h2>
 <div class="container">
     <label>ID {{ $product->id }}</label>
-    <label>商品画像<img src="{{ asset('images/' . $product->image) }}" alt="商品画像"></label>
+    <label>商品画像<img src="{{ asset('images/' . $product->img_path) }}" alt="商品画像"></label>
     <label>価格 ¥{{ number_format($product->price) }}</label>
     <label>在庫 {{ $product->stock }}</label>
     <label>メーカー {{ $product->company->company_name }}</label>

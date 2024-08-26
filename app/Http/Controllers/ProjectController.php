@@ -48,18 +48,19 @@ class ProjectController extends Controller
             'img_path' => 'nullable|image',
         ]);
 
+        if($request->hasFile('img_path')){
+            $image = $request->file('img_path');
+            $path = \Storage::put('public/images', $image);
+            $path = str_replace('public/', '', $path);
+           }else{
+               $path = null;
+           }
+
         // 新規商品の登録処理
         $product = new Product($request->input());
         $image = $request->file('img_path');
         $product->save();
 
-        if($request->hasFile('img_path')){
-         $image = $request->file('img_path');
-         $path = \Storage::put('/public', $image);
-         $path = explode('/', $path);
-        }else{
-            $path = null;
-        }
         return redirect()->route('products.index')->with('success', '商品が登録されました。');
     }
 
