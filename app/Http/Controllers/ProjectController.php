@@ -58,7 +58,7 @@ class ProjectController extends Controller
 
         // 新規商品の登録処理
         $product = new Product($request->input());
-        $image = $request->file('img_path');
+        $product->img_path = $path;
         $product->save();
 
         return redirect()->route('products.index')->with('success', '商品が登録されました。');
