@@ -1,18 +1,17 @@
 @extends('layouts.app')
 
-@section('content')
-
+@push('styles')
+<link href="{{ asset('css/show-style.css') }}" rel="stylesheet">
+@endpush
 @section('head')
-       <link rel="stylesheet" href="{{ asset('css/show.style.css') }}">
+<link rel="stylesheet" href="{{ asset('css/show.style.css') }}">
 @endsection
-
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
 @section('content')
 <h2>商品情報詳細画面</h2>
 <div class="container">
     <label>ID {{ $product->id }}</label>
-    <label>商品画像<img src="{{ asset('images/' . $product->img_path) }}" alt="商品画像"></label>
+    <label>商品画像<img src="{{ asset('storage/' . $product->img_path) }}" alt="商品画像"></label>
     <label>価格 ¥{{ number_format($product->price) }}</label>
     <label>在庫 {{ $product->stock }}</label>
     <label>メーカー {{ $product->company->company_name }}</label>

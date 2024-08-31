@@ -22,7 +22,7 @@
 
         <div class="form-group">
             <label for="image">商品画像</label>
-            <input type="file" name="image" id="image" class="form-control">
+            <input type="file" name="img_path" id="image" class="form-control">
             @error('image')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
@@ -54,7 +54,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">更新</button>
-        <a href="{{ route('products.show', $product->id) }}" class="btn btn-secondary">キャンセル</a>
+        <button href="{{ route('products.show', $product->id) }}" class="btn btn-secondary">キャンセル</button>
     </form>
 </div>
 @endsection

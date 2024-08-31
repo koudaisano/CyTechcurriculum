@@ -8,16 +8,18 @@
 
 @section('content')
     <h1>商品一覧画面</h1>
+    <form method="GET" action = "{{ route('products.index')}}">
         <div class = "search-erea">
-            <input type = "text" placeholder = "検索キーワード">
-                    <select>
+            <input type = "text" name = "product_name" placeholder = "検索キーワード">
+                    <select name = "company_id">
                         <option value = "">メーカー名</option>
                             @foreach ($companies as $company)
                         <option>{{ $company->company_name }}</option>
                             @endforeach
                     </select>
-                <button class="search-button">検索</button>
+                <button type = "submit" class="search-button">検索</button>
         </div>
+    </form>
 
     <table>
         <thead>
@@ -35,7 +37,7 @@
             @foreach ($products as $product)
                 <tr>
                     <td>{{ $product->id }}</td>
-                    <td><img src="{{ asset('images/' . $product->img_path) }}" alt="商品画像"></td>
+                    <td><img src="{{ asset('storage/' . $product->img_path) }}" alt="商品画像"></td>
                     <td>{{ $product->product_name }}</td>
                     <td>¥{{ number_format($product->price) }}</td>
                     <td>{{ $product->stock }}</td>

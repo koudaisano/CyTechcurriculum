@@ -1,0 +1,20 @@
+h2{
+    font-weight: 50;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
+img{
+    max-width: 100px;
+    height: 100px;
+}
+
+.container label {
+    display: block;
+    margin-bottom: 20px;
+    font-weight: 10px;
+}
+
+.container{
+    border: 1px;
+}

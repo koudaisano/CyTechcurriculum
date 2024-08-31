@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+
+@push('styles')
+<link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+@endpush
 @section('content')
 <h2>商品新規登録画面</h2>
 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">

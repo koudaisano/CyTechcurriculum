@@ -22,13 +22,9 @@ Route::get('/', function () {
 
 
 Route::get('/products', [App\Http\Controllers\ProjectController::class, 'index'])->name('products.index');
-
 Route::get('/products/create', [App\Http\Controllers\ProjectController::class, 'create'])->name('products.create');
 Route::post('/products/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('products.store');
-
 Route::get('/products/{product}/edit', [App\Http\Controllers\ProjectController::class, 'edit'])->name('products.edit');
 Route::put('/products/{product}' , [App\Http\Controllers\ProjectController::class, 'update'])->name('products.update');
-
 Route::get('/products/{product}', [App\Http\Controllers\ProjectController::class, 'show'])->name('products.show');
-
 Route::delete('/products/{product}', [ProjectController::class, 'destroy'])->name('products.destroy');
