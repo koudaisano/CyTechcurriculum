@@ -1,0 +1,74 @@
+h2{
+    font-weight: 400;
+    color: #000000;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-form-password{
+    margin-bottom: 30px;
+}
+
+.input-form-email{
+    margin-bottom: 30px;
+}
+
+.register-body {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.login-body {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+}
+
+.btn-back{
+    width: 65px;
+}
+
+.input-form{
+    margin-left: 20px;
+}
+
+.btn-primary{
+    margin-right: 40px;
+}
+
+.login-btn{
+    margin-left: 15px;
+}
+
+.register-btn{
+    margin-left: 15px;
+}
+
+.btn-primary{
+    background-color: #FD8901;
+    color: #000000;
+    border: 1px solid #EED4B9;
+    border-radius: 10px;
+}
+
+.btn-back{
+    background-color: #00F4FC;
+    color: #000000;
+    border: 1px solid #98DCE0;
+    border-radius: 5px;
+}
+
+.btn-Login{
+    background-color: #00F4FC;
+    color: #000000;
+    border: 1px solid #98DCE0;
+    border-radius: 5px;
+}

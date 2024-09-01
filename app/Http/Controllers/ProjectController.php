@@ -6,6 +6,7 @@ use App\Models\Companie;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 class ProjectController extends Controller
 {
@@ -71,7 +72,7 @@ class ProjectController extends Controller
         $product->img_path = $path;
         $product->save();
 
-        return redirect()->route('products.index')->with('success', '商品が登録されました。');
+        return redirect()->route('products.create')->with('success', '商品が登録されました。');
     }
 
     // 商品詳細表示
@@ -129,7 +130,7 @@ class ProjectController extends Controller
         $updateData = $request->only(['product_name', 'price', 'stock', 'company_id', 'comment']);
     $product->update($updateData);
         Log::info('Product updated successfully', ['product' =>$product]);
-        return redirect()->route('products.index')->with('success', '商品が更新されました。');
+        return redirect()->route('products.edit', ['product' => $product->id])->with('success', '商品が更新されました。');
     }
 
     // 商品の削除
@@ -140,6 +141,19 @@ class ProjectController extends Controller
 
         // 削除後にリダイレクト
         return redirect()->route('products.index')->with('success', '商品が削除されました。');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+            'email' => 'required|string|email|max:255|unique:users',
+        ]);
+        User::create([
+            'password' => Hash::make($request->password),
+            'email' => $request->email,
+        ]);
+        return redirect()->route('login')->with('success', 'アカウントが作成されました。ログインしてください。');
     }
 }
 

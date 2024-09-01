@@ -1,0 +1,61 @@
+h2 {
+    font-weight: lighter;
+    color: #000000;
+    margin-bottom: 30px;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+span{
+    color: #ff0000;
+}
+
+form {
+    display: block;
+    font-weight: 10px;
+    border: solid black;
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-group label{
+    font-weight: bolder;
+}
+
+.btn-primary{
+    background-color: #FD8901;
+    color: #000000;
+    border: 1px solid #EED4B9;
+    border-radius: 5px;
+    width: 65px;
+    margin-right: 30px;
+}
+.btn-cancel{
+    background-color: #00F4FC;
+    color: #000000;
+    border: 1px solid #98DCE0;
+    border-radius: 5px;
+}
+
+.btn-newregistration{
+    background-color: #FD8901;
+    color: #000000;
+    border: 1px solid #EED4B9;
+    border-radius: 5px;
+    margin-right: 30px;
+}
+
+.btn-back{
+    background-color: #00F4FC;
+    color: #000000;
+    border: 1px solid #98DCE0;
+    border-radius: 5px;
+    width: 65px;
+}

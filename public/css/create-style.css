@@ -1,0 +1,16 @@
+h2 {
+    font-weight: lighter;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
+span{
+    color: #ff0000;
+}
+
+form {
+    display: block;
+    font-weight: 10px;
+    border: solid black;
+    padding: 30px;
+}
