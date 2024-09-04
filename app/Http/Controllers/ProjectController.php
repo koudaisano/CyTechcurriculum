@@ -7,6 +7,9 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
 
 class ProjectController extends Controller
 {
@@ -153,7 +156,18 @@ class ProjectController extends Controller
             'password' => Hash::make($request->password),
             'email' => $request->email,
         ]);
-        return redirect()->route('login')->with('success', 'アカウントが作成されました。ログインしてください。');
+        \Log::info('User created: ' . json_encode($request->all()));
+        return redirect()->route('register')->with('success', 'アカウントが作成されました。ログインしてください。');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+        if(Auth::attempt($credentials)) {
+            return redirect()->intended('dashboard');
+        }
+        return redirect()->back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 }
-
