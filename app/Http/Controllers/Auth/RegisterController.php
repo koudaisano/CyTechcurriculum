@@ -71,27 +71,18 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-
-        Auth::logout();
-
         return redirect()->route('login');
     }
 
+
     public function register(Request $request)
-{
+    {
     $this->validator($request->all())->validate();
 
     event(new Registered($user = $this->create($request->all())));
 
-    $this->guard()->login($user);
+    Auth::login($user);
 
-    return $this->registered($request, $user)
-                ?: redirect()->route('login')->with('status', '登録が完了しました。ログインしてください。');
-}
-
-    protected function registered(Request $request, $user)
-    {
     return redirect()->route('login')->with('status', '登録が完了しました。ログインしてください。');
     }
-
 }
