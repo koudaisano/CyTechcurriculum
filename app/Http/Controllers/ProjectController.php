@@ -29,7 +29,11 @@ class ProjectController extends Controller
         $query->where('products.company_id', $request->input('company_id'));
     }
 
-    $products = $query->paginate(6);
+    if ($request->filled('company_name')) {
+        $query->where('companies.company_name', 'LIKE', '%' . $request->input('company_name') . '%');
+    }
+
+    $products = $query->paginate(6)->appends($request->query());
     $companies = Companie::all();
 
     // 特定のIDを持つ企業名を取得
@@ -144,30 +148,5 @@ class ProjectController extends Controller
 
         // 削除後にリダイレクト
         return redirect()->route('products.index')->with('success', '商品が削除されました。');
-    }
-
-    public function register(Request $request)
-    {
-        $request->validate([
-            'password' => 'required|string|min:8|confirmed',
-            'email' => 'required|string|email|max:255|unique:users',
-        ]);
-        User::create([
-            'password' => Hash::make($request->password),
-            'email' => $request->email,
-        ]);
-        \Log::info('User created: ' . json_encode($request->all()));
-        return redirect()->route('register')->with('success', 'アカウントが作成されました。ログインしてください。');
-    }
-
-    public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-        if(Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard');
-        }
-        return redirect()->back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
     }
 }

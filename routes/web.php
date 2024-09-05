@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 
 
 /*
@@ -22,7 +24,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
+Route::middleware(['auth'])->group(function () {
 Route::get('/products', [App\Http\Controllers\ProjectController::class, 'index'])->name('products.index');
 Route::get('/products/create', [App\Http\Controllers\ProjectController::class, 'create'])->name('products.create');
 Route::post('/products/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('products.store');
@@ -30,7 +32,9 @@ Route::get('/products/{product}/edit', [App\Http\Controllers\ProjectController::
 Route::put('/products/{product}' , [App\Http\Controllers\ProjectController::class, 'update'])->name('products.update');
 Route::get('/products/{product}', [App\Http\Controllers\ProjectController::class, 'show'])->name('products.show');
 Route::delete('/products/{product}', [ProjectController::class, 'destroy'])->name('products.destroy');
-Route::get('/products/register', [App\Http\Controllers\ProjectController::class, 'register'])->name('products.register');
-Route::post('/products/register', [App\Http\Controllers\ProjectController::class, 'register'])->name('products.register');
-
+Route::get('/products/register', [App\Http\Controllers\RegisterController::class, 'showRegistrationForm'])->name('products.register');
+Route::post('/products/register', [App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('products.register');
+});
+Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login');
+Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 

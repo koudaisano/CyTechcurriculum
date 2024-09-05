@@ -14,7 +14,7 @@
                     <select name = "company_id">
                         <option value = "">メーカー名</option>
                             @foreach ($companies as $company)
-                        <option>{{ $company->company_name }}</option>
+                        <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>{{ $company->company_name }}</option>
                             @endforeach
                     </select>
                 <button type = "submit" class="search-button">検索</button>
