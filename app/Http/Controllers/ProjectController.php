@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArticleRequest;
 use App\Models\Companie;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -55,16 +56,26 @@ class ProjectController extends Controller
         $companies = Companie::all();
         return view('create', compact('companies'));
     }
-    public function store(Request $request)
+
+    public function store(ArticleRequest $request)
     {
-        $request->validate([
+            $request->validate([
             'product_name' => 'required|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
             'company_id' => 'required|exists:companies,id',
             'comment' => 'nullable',
             'img_path' => 'nullable|image',
+        ],[
+            'product_name.required' => '商品名は入力必須項目です。',
+            'product_name.max' => '商品名は255文字以内で入力してください。',
+            'price.required' => '価格は入力必須項目です。',
+            'price.numeric' => '価格には数字のみを入力してください。',
+            'stock.required' => '在庫は入力必須項目です。',
+            'stock.numeric' => '在庫数には数字のみを入力してください。',
+            'company_id.required' => 'メーカー名は選択必須です。',
         ]);
+
 
         if ($request->hasFile('img_path')){
             $image = $request->file('img_path');
@@ -105,6 +116,14 @@ class ProjectController extends Controller
             'company_id' => 'required|exists:companies,id',
             'comment' => 'nullable',
             'img_path' => 'nullable|image',
+        ],[
+            'product_name.required' => '商品名は入力必須項目です。',
+        'product_name.max' => '商品名は255文字以内で入力してください。',
+        'price.required' => '価格は入力必須項目です。',
+        'price.numeric' => '価格には数字のみを入力してください。',
+        'stock.required' => '在庫は入力必須項目です。',
+        'stock.numeric' => '在庫数には数字のみを入力してください。',
+        'company_id.required' => 'メーカー名は選択必須です。',
         ]);
 
         Log::info('Form data', ['data' => $request->all()]);

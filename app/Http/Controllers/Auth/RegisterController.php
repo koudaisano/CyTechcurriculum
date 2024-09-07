@@ -81,7 +81,8 @@ class RegisterController extends Controller
 
     event(new Registered($user = $this->create($request->all())));
 
-    Auth::login($user);
+    //ユーザー新規登録したらログイン画面に遷移させるためにコメントアウト
+    //Auth::login($user);
 
     return redirect()->route('login')->with('status', '登録が完了しました。ログインしてください。');
     }

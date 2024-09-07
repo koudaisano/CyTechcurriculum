@@ -59,3 +59,7 @@ form {
     border-radius: 5px;
     width: 65px;
 }
+
+.alert-danger{
+    color: #ff0000;
+}
