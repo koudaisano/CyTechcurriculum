@@ -57,7 +57,7 @@ class ProjectController extends Controller
         return view('create', compact('companies'));
     }
 
-    public function store(ArticleRequest $request)
+    public function store(Request $request)
     {
             $request->validate([
             'product_name' => 'required|max:255',

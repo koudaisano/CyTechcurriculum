@@ -24,6 +24,10 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
+            'name' => 'required|name',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'password-confirm' => 'required|same:password',
             'product_name' => 'required|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
@@ -36,6 +40,11 @@ class ArticleRequest extends FormRequest
     public function messages()
     {
         return[
+        'name.required' => '名前は入力必須項目です。',
+        'email.required' => 'メールアドレスは入力必須項目です。',
+        'email.email' => '有効なメールアドレス形式で指定してください。',
+        'password-confirm.required' => '確認パスワードは必須です。',
+        'password-confirm.same' => 'パスワードと確認が一致していません。',
         'product_name.required' => '商品名は入力必須項目です。',
         'product_name.max' => '商品名は255文字以内で入力してください。',
         'price.required' => '価格は入力必須項目です。',
