@@ -16,20 +16,20 @@
                         @csrf
 
                         <div class="input-form">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="パスワード" required autocomplete="password">
+                            <input id="password" type="password" class="form-control" name="password" placeholder="パスワード" required autocomplete="password">
                             <div class="input-form-password">
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                    <div>{{ $message }}</div>
                                 </span>
                             @enderror
                             </div>
 
                             <div class = "input-form-email">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="アドレス" value="{{ old('email')}}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control" name="email" placeholder="アドレス" value="{{ old('email')}}" required autocomplete="email">
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <div>{{ $message }}</div>
                                     </span>
                                 @enderror
                             </div>

@@ -5,12 +5,17 @@
 @endpush
 @section('content')
 <h2>商品新規登録画面</h2>
+@if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="form-group">
         <label for="name">商品名<span>*</span></label>
-        <input type="text" name="product_name" value="{{ old('product_name') }}" required>
+        <input type="text" name="product_name" value="{{ old('product_name') }}">
         @error('product_name')
         <div class="alert alert-danger">{{ $message }}</div>
          @enderror
@@ -30,7 +35,7 @@
 
     <div class="form-group">
         <label for="price">価格<span>*</span></label>
-        <input type="number" id="price" name="price" value = "{{ old('price') }}" required>
+        <input type="number" id="price" name="price" value = "{{ old('price') }}" >
         @error('price')
         <div class="alert alert-danger">{{ $message }}</div>
         @enderror
@@ -38,7 +43,7 @@
 
     <div class="form-group">
         <label for="stock">在庫数<span>*</span></label>
-        <input type="number" id="stock" name="stock"  value = "{{ old('price') }}" required>
+        <input type="number" id="stock" name="stock"  value = "{{ old('price') }}" >
         @error('stock')
         <div class="alert alert-danger">{{ $message }}</div>
         @enderror

@@ -73,3 +73,7 @@ h2{
     border: 1px solid #98DCE0;
     border-radius: 5px;
 }
+
+.alert-alert-danger{
+    color: #ff0000;
+}

@@ -71,7 +71,7 @@ class ProjectController extends Controller
             'product_name.max' => '商品名は255文字以内で入力してください。',
             'price.required' => '価格は入力必須項目です。',
             'price.numeric' => '価格には数字のみを入力してください。',
-            'stock.required' => '在庫は入力必須項目です。',
+            'stock.required' => '在庫数は入力必須項目です。',
             'stock.numeric' => '在庫数には数字のみを入力してください。',
             'company_id.required' => 'メーカー名は選択必須です。',
         ]);

@@ -52,11 +52,19 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $messages = [
+            'name' => '名前は入力必須です。',
+            'email' => '有効なメールアドレスを入力してください。',
+            'password' => 'パスワードは入力必須です。',
+            'password.confirmed' => '入力したパスワードとパスワード確認用が一致しません。',
+            'password_confirmation' => 'パスワード確認用は入力必須です。',
+                    ];
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+            'password_confirmation' =>['required', 'string', 'min:8', 'same:password'],
+        ], $messages);
     }
 
     /**
@@ -71,12 +79,13 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'password_confirmation' => $data['password_confirmation'],
         ]);
         return redirect()->route('login');
     }
 
 
-    public function register(ArticleRequest $request)
+    public function register(Request $request)
     {
     $this->validator($request->all())->validate();
 
