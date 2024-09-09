@@ -9,20 +9,6 @@ class Product extends Model
 {
     use HasFactory;
 
-    public function CompanyNameById($Id)
-    {
-        return DB::table('products')
-        ->join('companies', 'Products.company_id', '=', 'companies.id')
-        ->where('products.id' , $Id)
-        ->select('companies.company_name')
-        ->first();
-    }
-
-    public function company()
-    {
-        return $this->belongsTo(Companie::class, 'company_id');
-    }
-
     protected $fillable = [
         'product_name',
         'price',
@@ -31,4 +17,17 @@ class Product extends Model
         'comment',
         'img_path',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Companie::class, 'company_id');
+    }
+
+    public static function getCompanyNameById($Id)
+    {
+        return self::join('companies', 'Products.company_id', '=', 'companies.id')
+        ->where('products.id' , $Id)
+        ->select('companies.company_name')
+        ->first();
+    }
 }

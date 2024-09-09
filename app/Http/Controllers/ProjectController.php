@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 
 class ProjectController extends Controller
@@ -39,17 +40,18 @@ class ProjectController extends Controller
 
     // 特定のIDを持つ企業名を取得
     $id = 24;
-    $results = $this->CompanyNameById($id);
+    $results = Product::getCompanyNameById($id);
     return view('index', compact('products', 'companies', 'results'));
 }
 
-    public function CompanyNameById($id)
-    {
-        return Product::join('companies', 'products.company_id', '=', 'companies.id')
-        ->where('products.id', $id)
-        ->select('companies.company_name')
-        ->get();
-    }
+    // public function CompanyNameById($id)
+    // {
+    //     return Product::join('companies', 'products.company_id', '=', 'companies.id')
+    //     ->where('products.id', $id)
+    //     ->select('companies.company_name')
+    //     ->get();
+    // }
+
     // 商品作成フォーム表示
     public function create()
     {
