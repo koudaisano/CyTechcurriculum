@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+
 
 
 class ProjectController extends Controller
@@ -60,15 +62,16 @@ class ProjectController extends Controller
     }
 
     public function store(Request $request)
-    {
-            $request->validate([
+{
+    try {
+        $validatedData = $request->validate([
             'product_name' => 'required|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
             'company_id' => 'required|exists:companies,id',
             'comment' => 'nullable',
             'img_path' => 'nullable|image',
-        ],[
+        ], [
             'product_name.required' => '商品名は入力必須項目です。',
             'product_name.max' => '商品名は255文字以内で入力してください。',
             'price.required' => '価格は入力必須項目です。',
@@ -78,22 +81,32 @@ class ProjectController extends Controller
             'company_id.required' => 'メーカー名は選択必須です。',
         ]);
 
-
-        if ($request->hasFile('img_path')){
+        if ($request->hasFile('img_path')) {
             $image = $request->file('img_path');
             $path = $image->store('public/images');
             $path = str_replace('public/', '', $path);
-           } else {
-               $path = null;
-           }
+        } else {
+            $path = null;
+        }
 
         // 新規商品の登録処理
-        $product = new Product($request->input());
+        $product = new Product($validatedData);
         $product->img_path = $path;
         $product->save();
 
         return redirect()->route('products.create')->with('success', '商品が登録されました。');
+    } catch (ValidationException $e) {
+        \Log::error('Validation error: ' . $e->getMessage());
+        return redirect()->back()
+            ->withInput()
+            ->withErrors($e->validator->errors());
+    } catch (\Exception $e) {
+        \Log::error('Error storing product: ' . $e->getMessage());
+        return redirect()->back()
+            ->withInput()
+            ->withErrors(['message' => '商品の登録に失敗しました。再度お試しください。']);
     }
+}
 
     // 商品詳細表示
     public function show(Product $product)
@@ -108,66 +121,83 @@ class ProjectController extends Controller
         return view('edit', compact('product', 'companies'));
     }
 
-    // 商品の更新
+    //商品の更新
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'product_name' => 'required|max:255',
-            'price' => 'required|numeric',
-            'stock' => 'required|numeric',
-            'company_id' => 'required|exists:companies,id',
-            'comment' => 'nullable',
-            'img_path' => 'nullable|image',
-        ],[
-            'product_name.required' => '商品名は入力必須項目です。',
-        'product_name.max' => '商品名は255文字以内で入力してください。',
-        'price.required' => '価格は入力必須項目です。',
-        'price.numeric' => '価格には数字のみを入力してください。',
-        'stock.required' => '在庫は入力必須項目です。',
-        'stock.numeric' => '在庫数には数字のみを入力してください。',
-        'company_id.required' => 'メーカー名は選択必須です。',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'product_name' => 'required|max:255',
+                'price' => 'required|numeric',
+                'stock' => 'required|numeric',
+                'company_id' => 'required|exists:companies,id',
+                'comment' => 'nullable',
+                'img_path' => 'nullable|image',
+            ],[
+                'product_name.required' => '商品名は入力必須項目です。',
+                'product_name.max' => '商品名は255文字以内で入力してください。',
+                'price.required' => '価格は入力必須項目です。',
+                'price.numeric' => '価格には数字のみを入力してください。',
+                'stock.required' => '在庫は入力必須項目です。',
+                'stock.numeric' => '在庫数には数字のみを入力してください。',
+                'company_id.required' => 'メーカー名は選択必須です。',
+            ]);
 
-        Log::info('Form data', ['data' => $request->all()]);
+            Log::info('Form data', ['data' => $request->all()]);
 
-        $product = Product::findOrFail($id);
-        Log::info('Product found', ['product' =>$product]);
+            $product = Product::findOrFail($id);
+            Log::info('Product found', ['product' => $product]);
 
-            // 画像がアップロードされた場合の処理
-        if($request->hasFile('img_path')) {
-            Log::info('Image file found in request');
-            $newImagePath = $request->file('img_path')->store('images', 'public');
-            $image = $request->file('img_path');
-            $path = $image->store('public/images');
-            Log::info('Image stored', ['path' => $path]);
+            if ($request->hasFile('img_path')) {
+                Log::info('Image file found in request');
+                $newImagePath = $request->file('img_path')->store('images', 'public');
+                $image = $request->file('img_path');
+                $path = $image->store('public/images');
+                Log::info('Image stored', ['path' => $path]);
 
-            // 必要であれば古い画像を削除する
-            if($product->img_path){
-                $oldImagePath = 'public/images/' . $product->img_path;
-                if (\Storage::exists($oldImagePath)) {
-                    \Storage::delete($oldImagePath);
-                    Log::info('Old image deleted', ['old_path' => $oldImagePath]);
+                // 必要であれば古い画像を削除する
+                if ($product->img_path) {
+                    $oldImagePath = 'public/images/' . $product->img_path;
+                    if (\Storage::exists($oldImagePath)) {
+                        \Storage::delete($oldImagePath);
+                        Log::info('Old image deleted', ['old_path' => $oldImagePath]);
+                    }
                 }
+                // 新しい画像パスを設定
+                $product->img_path = $newImagePath;
+                Log::info('New image path set', ['new_path' => $product->img_path]);
             }
-            // 新しい画像パスを設定
-            $product->img_path = $newImagePath;
-            Log::info('New image path set', ['new_path' => $product->img_path]);
 
+            $updateData = $request->only(['product_name', 'price', 'stock', 'company_id', 'comment']);
+            $product->update($updateData);
+            Log::info('Product updated successfully', ['product' => $product]);
+
+            return redirect()->route('products.edit', ['product' => $product->id])->with('success', '商品が更新されました。');
+        } catch (\Exception $e) {
+            \Log::error('Error updating product: ' . $e->getMessage());
+
+            // バリデーションエラーの場合とその他の例外の場合で処理を分ける
+            if ($e instanceof ValidationException) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors($e->validator->errors());
+            } else {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['message' => '商品の更新に失敗しました。再度お試しください。']);
+            }
         }
-        $product->save();
-        $updateData = $request->only(['product_name', 'price', 'stock', 'company_id', 'comment']);
-    $product->update($updateData);
-        Log::info('Product updated successfully', ['product' =>$product]);
-        return redirect()->route('products.edit', ['product' => $product->id])->with('success', '商品が更新されました。');
     }
 
     // 商品の削除
     public function destroy(Product $product)
     {
-        // 商品の削除処理
-        $product->delete();
-
-        // 削除後にリダイレクト
-        return redirect()->route('products.index')->with('success', '商品が削除されました。');
+        try {
+            $product->delete();
+        Log::info('Product deleted successfully');
+        return redirect()->route('products.index', $product)->with('success', '商品が削除されました。');
+    } catch (\Exception $e) {
+        Log::error('Error deleting product: ' . $e->getMessage());
+        return redirect()->back()->with('error', '商品の削除に失敗しました。');
+        }
     }
 }
