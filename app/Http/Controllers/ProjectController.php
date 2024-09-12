@@ -46,14 +46,6 @@ class ProjectController extends Controller
     return view('index', compact('products', 'companies', 'results'));
 }
 
-    // public function CompanyNameById($id)
-    // {
-    //     return Product::join('companies', 'products.company_id', '=', 'companies.id')
-    //     ->where('products.id', $id)
-    //     ->select('companies.company_name')
-    //     ->get();
-    // }
-
     // 商品作成フォーム表示
     public function create()
     {
