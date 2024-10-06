@@ -23,12 +23,11 @@ class ProjectController extends Controller
     $query = Product::join('companies', 'products.company_id', '=', 'companies.id')
         ->select('products.*', 'companies.company_name');
 
-    // 商品名の部分一致検索
+    // フィルタの適用
     if ($request->filled('product_name')) {
         $query->where('products.product_name', 'LIKE', '%' . $request->input('product_name') . '%');
     }
 
-    // 企業名による絞り込み
     if ($request->filled('company_id')) {
         $query->where('products.company_id', $request->input('company_id'));
     }
@@ -36,23 +35,56 @@ class ProjectController extends Controller
     if ($request->filled('company_name')) {
         $query->where('companies.company_name', 'LIKE', '%' . $request->input('company_name') . '%');
     }
+     // 価格(下限〜上限)
+    if ($request->filled('min_price') && $request->filled('max_price')) {
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+        $query->whereBetween('products.price', [$minPrice , $maxPrice]);
+    }
+    // 在庫数(下限〜上限)
+    if ($request->filled('min_stock') && $request->filled('max_stock')) {
+        $minStock = $request->input('min_stock');
+        $maxStock = $request->input('max_stock');
+        $query->whereBetween('products.stock', [$minStock , $maxStock]);
+    }
 
+    //ソート機能
+    if ($request->filled('sort_column') &&  $request->filled('sort_direction')) {
+        $sortColumn = $request->input('sort_column');
+        $sortDirection = $request->input('sort_direction');
+
+        //商品画像が”ある”又は”ない”でソート
+    if ($sortColumn == 'products.img_path') {
+        $query->orderByRaw('IFNULL(products.img_path, 1)' . $sortDirection);
+        } else {
+        //他のカラムは通常のソート
+        $query->orderBy($sortColumn, $sortDirection);
+        }
+    } else {
+        //デフォルトでID降順にソート
+        $query->orderBy('products.id', 'desc');
+    }
+
+    // 検索機能の非同期処理化
+    if ($request->ajax()) {
+        $products = $query->paginate(6);
+
+        return response()->json([
+            'products' => $products,
+            'pagination' => $products->links()->toHtml(),
+        ]);
+    }
+
+    // 通常リクエストの場合の処理
     $products = $query->paginate(6)->appends($request->query());
     $companies = Companie::all();
 
     // 特定のIDを持つ企業名を取得
     $id = 24;
     $results = Product::getCompanyNameById($id);
+
     return view('index', compact('products', 'companies', 'results'));
 }
-
-    // public function CompanyNameById($id)
-    // {
-    //     return Product::join('companies', 'products.company_id', '=', 'companies.id')
-    //     ->where('products.id', $id)
-    //     ->select('companies.company_name')
-    //     ->get();
-    // }
 
     // 商品作成フォーム表示
     public function create()
@@ -194,10 +226,13 @@ class ProjectController extends Controller
         try {
             $product->delete();
         Log::info('Product deleted successfully');
-        return redirect()->route('products.index', $product)->with('success', '商品が削除されました。');
+
+        //非同期リクエスト
+        return response()->json(['success' => true]);
     } catch (\Exception $e) {
         Log::error('Error deleting product: ' . $e->getMessage());
-        return redirect()->back()->with('error', '商品の削除に失敗しました。');
+
+        return response()->json(['success' => false, 'message' => '商品の削除に失敗しました。']);
         }
     }
 }
