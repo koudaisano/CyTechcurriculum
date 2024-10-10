@@ -19,19 +19,20 @@ class PurchaseController extends Controller
         $productId = $validatedData['product_id'];
         $quantity = $validatedData['quantity'];
 
-        DB::beginTransaction();
+        //製品を取得・在庫チェックを行う処理
+        $product = Product::findOrFail($productId);
+
+        if ($product->stock < $quantity) {
+           return response()->json(['success' => false, 'message' => '在庫が不足しています。'], 422);
+         }
+         DB::beginTransaction();
 
         try {
-            $product = Product::findOrFail($productId);
-
-            if ($product->stock < $quantity) {
-                return response()->json(['success' => false, 'message' => '在庫が不足しています。'], 400);
-            }
-
+            //在庫を減少させて保存の処理
             $product->stock -= $quantity;
             $product->save();
 
-
+            //販売記録を作成する処理
             Sale::create([
                 'product_id' => $productId,
                 'quantity' => $quantity,

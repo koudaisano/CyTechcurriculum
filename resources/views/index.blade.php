@@ -12,7 +12,7 @@
 
 @section('content')
     <h1>商品一覧画面</h1>
-    <form method="GET" action = "{{ route('products.index')}}">
+    <form id="serch-erea" method="GET" action = "{{ route('products.index')}}">
         <div class = "search-erea">
             <input class = "input-erea" type = "text" name = "product_name" placeholder = "検索キーワード">
                     <select class = "input-erea" name = "company_id">
@@ -31,6 +31,7 @@
         </div>
     </form>
 
+<div id="product-list"> <!-- 検索結果をここに表示 -->
     <table>
         <thead>
             <tr>
@@ -114,7 +115,7 @@
                     <td>{{ $product->company_name }}</td>
                     <td>
                         <button onclick="window.location.href='{{ route('products.show', $product->id) }}'" class="btn-info">詳細</button>
-                        <form action="{{ route('products.destroy', $product) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('products.destroy', $product->id) }}" method="POST"data-product-id="{{ $product->id }}" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-delete">削除</button>
@@ -124,7 +125,9 @@
             @endforeach
         </tbody>
     </table>
-    <div class="pagination-container">
+</div>
+
+    <div class="pagination-container" id="pagination">
         {{ $products->links() }}
     </div>
 @endsection

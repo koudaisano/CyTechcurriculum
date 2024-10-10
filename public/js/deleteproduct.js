@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const deleteButtons = document.querySelectorAll('.btn-delete');
 
+
     deleteButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault(); //ページの再読みを防ぐ
@@ -9,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (confirm('本当に削除しますか？')) {
                 fetch(form.action, {
-                    method: 'POST',
+                    method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         'Content-Type': 'application/json'
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Remove the row from the table
+                        console.log('削除成功');
                         const productRow = document.getElementById(`product-row-${productId}`);
                         productRow.remove();
                     } else {
