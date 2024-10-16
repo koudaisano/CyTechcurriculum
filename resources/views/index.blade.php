@@ -8,11 +8,12 @@
 
 @push('scripts')
 <script src="{{ asset('js/deleteproduct.js') }}"></script>
+<script src="{{ asset('js/searchproduct.js') }}"></script>
 @endpush
 
 @section('content')
     <h1>商品一覧画面</h1>
-    <form id="serch-erea" method="GET" action = "{{ route('products.index')}}">
+    <form id="search-erea" method="GET" action = "{{ route('products.index')}}">
         <div class = "search-erea">
             <input class = "input-erea" type = "text" name = "product_name" placeholder = "検索キーワード">
                     <select class = "input-erea" name = "company_id">
@@ -126,7 +127,6 @@
         </tbody>
     </table>
 </div>
-
     <div class="pagination-container" id="pagination">
         {{ $products->links() }}
     </div>
