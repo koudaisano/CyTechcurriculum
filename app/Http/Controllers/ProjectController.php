@@ -228,7 +228,8 @@ class ProjectController extends Controller
         $product->delete();
         Log::info('Product deleted successfully');
 
-        return response()->json(['success' => true, 'message' => '商品の削除に成功しました。']);
+
+        return response()->json(['success' => true, 'message' => '商品の削除に成功しました。'], 200, array(), JSON_PRETTY_PRINT);
     } catch (\Exception $e) {
         Log::error('Error deleting product: ' . $e->getMessage());
 
