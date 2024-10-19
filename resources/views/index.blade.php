@@ -115,11 +115,11 @@
                     <td>{{ $product->stock }}</td>
                     <td>{{ $product->company_name }}</td>
                     <td>
-                        <button onclick="window.location.href='{{ route('products.show', $product->id) }}'" class="btn-info">詳細</button>
+                        <button onclick="window.location.href='{{ route('products.show', $product->id) }}'" class="btn-info" data-id="{{ $product->id }}">詳細</button>
                         <form action="{{ route('products.destroy', $product->id) }}" method="POST" data-product-id="{{ $product->id }}" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn-delete">削除</button>
+                            <button type="submit" class="btn-delete" data-id="{{ $product->id }}">削除</button>
                         </form>
                     </td>
                 </tr>
