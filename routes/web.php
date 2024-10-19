@@ -24,7 +24,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth'])->group(function () {
+//Route::middleware(['auth'])->group(function () {
 Route::get('/products', [App\Http\Controllers\ProjectController::class, 'index'])->name('products.index');
 Route::get('/products/create', [App\Http\Controllers\ProjectController::class, 'create'])->name('products.create');
 Route::post('/products/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('products.store');
@@ -35,7 +35,7 @@ Route::get('/products/{product}', [App\Http\Controllers\ProjectController::class
 Route::delete('/products/{product}', [ProjectController::class, 'destroy'])->name('products.destroy');
 Route::get('/products/register', [App\Http\Controllers\RegisterController::class, 'showRegistrationForm'])->name('products.register');
 Route::post('/products/register', [App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('products.register');
-});
+//});
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 

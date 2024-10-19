@@ -221,18 +221,18 @@ class ProjectController extends Controller
     }
 
     // 商品の削除
-    public function destroy(Product $product)
+    public function destroy($id)
     {
         try {
-            $product->delete();
+            $product = Product::findOrFail($id);
+        $product->delete();
         Log::info('Product deleted successfully');
 
-        //非同期リクエスト
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'message' => '商品の削除に成功しました。']);
     } catch (\Exception $e) {
         Log::error('Error deleting product: ' . $e->getMessage());
 
         return response()->json(['success' => false, 'message' => '商品の削除に失敗しました。']);
-        }
+    }
     }
 }
