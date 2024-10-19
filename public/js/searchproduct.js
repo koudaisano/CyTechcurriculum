@@ -1,3 +1,6 @@
+//削除機能をdeleteproduct.jsから移行
+
+
 $(document).ready(function () {
 
     //csrfトークンをmetaから取得※削除機能に必要
@@ -56,7 +59,10 @@ $(document).ready(function () {
     //検索後の削除ボタン押下時の設定
     $(document).off('click', '.btn-delete').on('click', '.btn-delete', function() {
         let productId = $(this).data('id');
+        console.log(productId);
         if (confirm('本当に削除しますか？')) {
+            console.log('か');
+
             $.ajax({
                 url: '/products/' + productId,
                 type: 'DELETE',
@@ -64,20 +70,24 @@ $(document).ready(function () {
                     _token: csrfToken //csrfトークン追加
                 },
                 success: function(response) {
+                    console.log('き');
                     alert('削除が完了しました。');
-                    //削除した商品を非同期で削除
+                    // 削除した商品を非同期で削除
                      $('#product-list tbody tr').filter(function(){
                         return $(this).find('btn-delete').data('id') == productId;
                     }).remove();
 
-                    //検索結果後に商品を削除した後の検索結果を再送信して、結果を保持する
-                     $('#search-erea').submit();
+                    // //検索結果後に商品を削除した後の検索結果を再送信して、結果を保持する
+                      $('#search-erea').submit();
                 },
                 error: function(xhr) {
-                    console.error(xhr.responseText);
+                    console.log('く');
+                     console.error(xhr.responseText);
                 }
             });
+            console.log('け');
         }
+        return false;
     });
 
     // 検索後の条件を保持したまま2ページ以降を表示する処理
