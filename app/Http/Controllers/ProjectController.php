@@ -48,32 +48,34 @@ class ProjectController extends Controller
         $query->whereBetween('products.stock', [$minStock , $maxStock]);
     }
 
+
+    //search.jsファイルのソートプラグインでソート実装済みのためコメントアウト中➡※こちらはSTEP８クリア後に削除
     //ソート機能
-    if ($request->filled('sort_column') &&  $request->filled('sort_direction')) {
-        $sortColumn = $request->input('sort_column');
-        $sortDirection = $request->input('sort_direction');
+    // if ($request->filled('sort_column') &&  $request->filled('sort_direction')) {
+    //     $sortColumn = $request->input('sort_column');
+    //     $sortDirection = $request->input('sort_direction');
 
-        //商品画像が”ある”又は”ない”でソート
-    if ($sortColumn == 'products.img_path') {
-        $query->orderByRaw('IFNULL(products.img_path, 1)' . $sortDirection);
-        } else {
-        //他のカラムは通常のソート
-        $query->orderBy($sortColumn, $sortDirection);
-        }
-    } else {
-        //デフォルトでID降順にソート
-        $query->orderBy('products.id', 'desc');
-    }
+    //     //商品画像が”ある”又は”ない”でソート
+    // if ($sortColumn == 'products.img_path') {
+    //     $query->orderByRaw('IFNULL(products.img_path, 1)' . $sortDirection);
+    //     } else {
+    //     //他のカラムは通常のソート
+    //     $query->orderBy($sortColumn, $sortDirection);
+    //     }
+    // } else {
+    //     //デフォルトでID降順にソート
+    //     $query->orderBy('products.id', 'desc');
+    // }
 
-    // 検索機能の非同期処理化
-    if ($request->ajax()) {
-        $products = $query->paginate(6);
+    // // 検索機能の非同期処理化
+    // if ($request->ajax()) {
+    //     $products = $query->paginate(6);
 
-        return response()->json([
-            'products' => $products,
-            'pagination' => $products->links()->toHtml(),
-        ]);
-    }
+    //     return response()->json([
+    //         'products' => $products,
+    //         'pagination' => $products->links()->toHtml(),
+    //     ]);
+    // }
 
     // 通常リクエストの場合の処理
     $products = $query->paginate(6)->appends($request->query());
