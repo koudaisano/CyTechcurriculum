@@ -5,6 +5,10 @@ h1{
     margin-bottom: 30px;
 }
 
+.tablesorter th {
+    cursor: pointer;
+}
+
 .search-erea{
     display:flex;
     margin-bottom: 30px;
