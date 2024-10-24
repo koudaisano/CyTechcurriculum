@@ -2,6 +2,7 @@
 //コード確認して頂いた後にこちらのdeleteproduct.jsは削除します
 
 
+
 // document.addEventListener('DOMContentLoaded', function() {
 //     const deleteButtons = document.querySelectorAll('.btn-delete');
 
