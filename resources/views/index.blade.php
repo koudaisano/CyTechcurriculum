@@ -4,10 +4,10 @@
 @push('styles')
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 @endpush
+
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
 @push('scripts')
-<script src="{{ asset('js/deleteproduct.js') }}"></script>
 <script src="{{ asset('js/searchproduct.js') }}"></script>
 @endpush
 
@@ -33,75 +33,15 @@
     </form>
 
 <div id="product-list"> <!-- 検索結果をここに表示 -->
-    <table>
+    <table id="product-table" class="tablesorter">
         <thead>
             <tr>
-                <th>
-                    <a href = "{{ route('products.index', ['products.id', 'sort_direction' => request('sort_direction') === 'asc' ? 'desc' : 'asc'] + request()->all()) }}">
-                    ID
-                        @if(request('sort_column') == 'products.id')
-                            @if(request('sort_direction') == 'asc')
-                            @else
-                            @endif
-                        @endif
-                    </a>
-                </th>
-
-                <th>
-                    <a href="{{ route('products.index', ['sort_column' => 'products.img_path', 'sort_direction' => request('sort_direction') === 'asc' ? 'desc' : 'asc'] + request()->all()) }}">
-                    商品画像
-                        @if(request('sort_column') == 'products.img_path')
-                            @if(request('sort_direction') == 'asc')
-                            @else
-                            @endif
-                        @endif
-                    </a>
-                </th>
-
-                <th>
-                    <a href = "{{ route('products.index', ['products.id', 'sort_direction' => request('sort_direction') === 'asc' ? 'desc' : 'asc'] + request()->all()) }}">
-                    商品名
-                        @if(request('sort_column') == 'products.id')
-                            @if(request('sort_direction') == 'asc')
-                            @else
-                            @endif
-                        @endif
-                    </a>
-                </th>
-
-                <th>
-                    <a href = "{{ route('products.index', ['products.id', 'sort_direction' => request('sort_direction') === 'asc' ? 'desc' : 'asc'] + request()->all()) }}">
-                    価格
-                        @if(request('sort_column') == 'products.id')
-                            @if(request('sort_direction') == 'asc')
-                            @else
-                            @endif
-                        @endif
-                    </a>
-                </th>
-
-                <th>
-                    <a href = "{{ route('products.index', ['products.id', 'sort_direction' => request('sort_direction') === 'asc' ? 'desc' : 'asc'] + request()->all()) }}">
-                    在庫数
-                        @if(request('sort_column') == 'products.id')
-                            @if(request('sort_direction') == 'asc')
-                            @else
-                            @endif
-                        @endif
-                    </a>
-                </th>
-
-                <th>
-                    <a href = "{{ route('products.index', ['products.id', 'sort_direction' => request('sort_direction') === 'asc' ? 'desc' : 'asc'] + request()->all()) }}">
-                    メーカー名
-                        @if(request('sort_column') == 'products.id')
-                            @if(request('sort_direction') == 'asc')
-                            @else
-                            @endif
-                        @endif
-                    </a>
-                </th>
-
+                <th>ID</th>
+                <th>商品画像</th>
+                <th>商品名</th>
+                <th>価格</th>
+                <th>在庫数</th>
+                <th>メーカー名</th>
                 <th><button onclick="window.location.href='{{ route('products.create') }}'" class="btn-newregistration" onclick="">新規登録</button></th>
             </tr>
         </thead>
