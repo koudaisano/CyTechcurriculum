@@ -17,24 +17,23 @@ $(document).ready(function () {
 
     function updateTableContent(response) {
         let tableBody = $('#product-list tbody');
-        tableBody.empty();
+        let rows = '';
 
-        $.each(response.products.data, function(index,product){
-            let row = '<tr>';
-                    row += '<td>' + product.id + '</td>';
-                    row += '<td><img src="/storage/' + product.img_path + '" alt="' + product.product_name + '"></td>';
-                    row += '<td>' + product.product_name + '</td>';
-                    row += '<td>' + product.price + '</td>';
-                    row += '<td>' + product.stock + '</td>';
-                    row += '<td>' + product.company_name + '</td>';
-                    row += '<td>';
-                    row += '<button class="btn-info" data-id="' + product.id + '">詳細</button>';
-                    row += '<button class="btn-delete" data-id="' + product.id + '">削除</button>';
-                    row += '</td>';
-                    row += '</tr>';
-
-                    tableBody.append(row);
+        $.each(response.products.data, function(index, product) {
+            rows += '<tr id="product-row-' + product.id + '">';
+            rows += '<td>' + product.id + '</td>';
+            rows += '<td><img src="/storage/' + product.img_path + '" alt="' + product.product_name + '"></td>';
+            rows += '<td>' + product.product_name + '</td>';
+            rows += '<td>' + product.price + '</td>';
+            rows += '<td>' + product.stock + '</td>';
+            rows += '<td>' + product.company_name + '</td>';
+            rows += '<td>';
+            rows += '<button class="btn-info" data-id="' + product.id + '">詳細</button>';
+            rows += '<button class="btn-delete" data-id="' + product.id + '">削除</button>';
+            rows += '</td>';
+            rows += '</tr>';
         });
+        tableBody.html(rows);
 
         //ページネーション部分の更新
         $('#pagination').html(response.pagination);
@@ -69,21 +68,25 @@ $(document).ready(function () {
     });
 
     //検索後の削除ボタン押下時の設定
-    $(document).on('click', '.btn-delete',function() {
+    $(document).on('click', '.btn-delete',function(e) {
+        e.preventDefault();//デフォルトの動作を防ぐ
         let productId = $(this).data('id');
+        let form = $(this).closest('form');
         if (confirm('本当に削除しますか？')) {
             $.ajax({
                 url: '/products/' + productId,
                 type: 'DELETE',
                 data: {
-                    _token: csrfToken //csrfトークン追加
+                    _token: csrfToken // CSRFトークンを手動で追加
                 },
                 success: function(response) {
-                    alert('削除が完了しました。');
-                    // 商品を非同期で削除
-                     $('#product-row-' + productId).remove();
-                     //tablesorterを更新
-                    $("#product-list").trigger("update");
+                    if (response.success) {
+                        alert('削除が完了しました。');
+                        $('#product-row-' + productId).remove();
+                        $("#product-table").trigger("update");
+                    } else {
+                        alert('削除に失敗しました：' + response.message);
+                    }
                 },
                 error: function(xhr) {
                      console.error(xhr.responseText);
