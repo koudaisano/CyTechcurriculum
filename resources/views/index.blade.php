@@ -71,3 +71,4 @@
         {{ $products->links() }}
     </div>
 @endsection
+
