@@ -11,7 +11,6 @@ $(document).ready(function () {
     //tablesorterを初期化
     $("#product-table").tablesorter({
         headers:{
-            1:{ sorter: false }, //商品画像列はソートしない
             6:{ sorter: false } //削除・詳細ボタンがある列はソートしないのでfalse設定
         }
     });
