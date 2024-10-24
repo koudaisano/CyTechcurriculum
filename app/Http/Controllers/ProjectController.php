@@ -218,7 +218,7 @@ return view('index', compact('products', 'companies'));
     } catch (\Exception $e) {
         Log::error('Error deleting product: ' . $e->getMessage());
 
-        return response()->json(['success' => false, 'message' => '商品の削除に失敗しました。']);
+        return response()->json(['success' => false, 'message' => '商品の削除に失敗しました。'], 500);
     }
     }
 }
